@@ -1,21 +1,26 @@
-import httpx
 import logging
+from pathlib import Path
 
 
 logger = logging.getLogger('main_logger')
 
 
-WORKER_URL = 'http://www.localhost:8001'
+class DataClient:
 
+    def get_info(self) -> list[str]:
+        """
+        Opens ./data folder. Reads all *.txt files.
+        Appends each line of the files to an array.
 
-class WorkerClient:
-    def __init__(self):
-        self.url = WORKER_URL
+        :returns: A list of strings with every line in folder files.
+        """
+        logger.debug("Reading files from folder /data")
 
-    async def get_info(self):
-        logger.debug("Poxy request to Worker client")
-        try:
-            async with httpx.AsyncClient() as client:
-                return await client.get(self.url + '/getInfo')
-        except Exception:
-            return "Unable to stablish connection with Worker."
+        str_list = []
+
+        for file in Path('./data').glob('*.txt'):
+            with open(file) as f:
+                for line in f:
+                    str_list.append(line.strip())
+
+        return str_list

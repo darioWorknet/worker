@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import logging
-from adapters.client.client import WorkerClient
+from adapters.client.client import DataClient
 
 # Initialize logger
 logger = logging.getLogger('main_logger')
@@ -22,5 +22,5 @@ async def startup_event():
 @app.get("/getInfo")
 async def get_info():
     logger.info('Received call to /getInfo endpoint')
-    client = WorkerClient()
-    return await client.get_info()
+    client = DataClient()
+    return client.get_info()
